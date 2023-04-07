@@ -61,14 +61,23 @@ return function(conf, meta, wallpaper)
         awful.key({ meta, shift }, "q", awesome.quit,
             { description = "quit awesome", group = "awesome" }),
         awful.key({ meta, shift }, "/", function()
-            local cmd = "convert " .. wallpaper .. " -resize"
+            local cmd = "convert '" .. wallpaper .. "' -resize"
                 .. " $(xdpyinfo | grep dimensions |"
-                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/') RGB:-"
-                .. " | i3lock --raw $(xdpyinfo | grep dimensions |"
-                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/'):rgb"
+                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/') RGB:-"
+                .. " | i3lock -k --date-str='%Y-%m-%d [%w]' -e"
+                .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
+                .. " --raw $(xdpyinfo | grep dimensions |"
+                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/'):rgb"
                 .. " --image /dev/stdin"
             local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
-            awful.spawn('bash -c "' .. cmd .. '"')
+            awful.spawn('bash -c "' .. cmd .. ' && '.. sleep .. '"')
+        end,
+            { description = "lock screen", group = "awesome" }),
+        awful.key({ meta, ctrl }, "/", function()
+            local cmd = "i3lock -B5 -e -k --date-str='%Y-%m-%d [%w]'"
+                .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
+            local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
+            awful.spawn('bash -c "' .. cmd .. ' && '.. sleep .. '"')
         end,
             { description = "lock screen", group = "awesome" }),
         awful.key({ meta, }, ".", function() machi.default_editor.start_interactive() end,
