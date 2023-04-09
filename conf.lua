@@ -104,8 +104,12 @@ local M = {
         wallpaper = os.getenv('HOME') .. '/Pictures/wallpaper',
         powerline_taglist = false
     },
-    editor = 'wezterm --config-file ' .. os.getenv('HOME') .. '/Configuration/wezterm/nvim.lua',
+    editor = 'nvim',
     terminal = 'wezterm',
+    ide = "bash -c "
+       .. "'export NVIM_PRESET=x SHELL=/usr/local/bin/nu; "
+       .. "export PATH=/opt/node/bin:$HOME/.local/bin:$PATH; "
+       .. "/usr/local/bin/neovide --multigrid --maximized'",
     -- inspect with xprop
     floating = {
         instance = {

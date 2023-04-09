@@ -34,6 +34,7 @@ end
 
 return function(conf, meta, wallpaper)
     local terminal = conf.terminal or "x-terminal-emulator"
+    local ide = conf.ide or "vim"
 
     local quake = lain.util.quake {
         app = terminal,
@@ -56,6 +57,8 @@ return function(conf, meta, wallpaper)
         -- Standard program
         awful.key({ meta, }, "Return", function() awful.spawn(terminal) end,
             { description = "open a terminal", group = "launcher" }),
+        awful.key({ meta, }, "[", function() awful.spawn(ide) end,
+            { description = "open a ide", group = "launcher" }),
         awful.key({ meta, ctrl }, "r", awesome.restart,
             { description = "reload awesome", group = "awesome" }),
         awful.key({ meta, shift }, "q", awesome.quit,
