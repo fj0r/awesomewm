@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local lain = require("lain")
 local awful = require("awful")
 local beautiful = require("beautiful")
+local gears = require('gears')
 local say = require('say')
 
 local attach_tooltip = function(obj, fun)
@@ -128,6 +129,16 @@ local color_rank = color_generator {
 }
 
 local function new_pie(config)
+    local c = wibox.widget {
+        checked       = false,
+        bg            = '#888',
+        color         = beautiful.bg_normal,
+        border_color  = beautiful.bg_normal,
+        border_width  = 6,
+        paddings      = 3,
+        shape         = gears.shape.circle,
+        widget        = wibox.widget.checkbox
+    }
     local m = wibox.widget {
         colors = {},
         min_value = 0,
@@ -145,11 +156,21 @@ local function new_pie(config)
     }
     config.src {
         settings = function()
+            local s = config.status()
+            if s == 1 then
+                c.checked = true
+            else
+                c.checked = false
+            end
             local v = config.value()
             if v == 0 then
-                m.colors = { config.invalid_color or 'black' }
+                local cl = config.invalid_color or 'black'
+                m.colors = { cl }
+                c.color = cl
             else
-                m.colors = { color_rank(v, 100) }
+                local cl = color_rank(v, 100)
+                m.colors = { cl }
+                c.color = cl
             end
             m.values = { v }
         end
@@ -157,7 +178,11 @@ local function new_pie(config)
     attach_tooltip(m, function()
         return config.format(config.value())
     end)
-    return m
+    return wibox.widget {
+        c,
+        m,
+        layout = wibox.layout.stack
+    }
 end
 
 local battery = function()
@@ -186,7 +211,7 @@ local function new_fschart(config)
         min_value    = 0,
         rounded_edge = false,
         start_angle  = 0,
-        thickness    = 5,
+        thickness    = 3,
         bg           = "#888",
         border_width = 0,
         border_color = "#000000",
