@@ -43,30 +43,16 @@ return function(conf, menu, wallpaper)
     local rotated_widget = utils.rotate(conf.sidebar)
     screen.connect_signal("property::geometry", set_wallpaper)
 
+    local default_tag = nil
     local my_tags = {}
+    local my_layouts = {}
     for k, v in ipairs(conf.tags) do
         table.insert(my_tags, v.name)
-        table.insert(conf.layouts, v.layout and #v.layout ~= 0
+        table.insert(my_layouts, v.layout and #v.layout ~= 0
             and get(awful.layout.suit, v.layout)
             or awful.layout.suit.tile)
-        for _, term in ipairs(v.apps or {}) do
-            local rule = {}
-            local count = 0
-            for p in ipairs({ 'instance', 'class', 'name', 'role' }) do
-                if term[p] then
-                    rule[p] = term[p]
-                    term[p] = nil
-                    count = count + 1
-                end
-            end
-            if count > 0 then
-                term.screen = term.screen or 1
-                term.tag = k
-                table.insert(conf.rules, {
-                    rule = rule,
-                    properties = term
-                })
-            end
+        if v.default then
+            default_tag = k
         end
     end
 
@@ -76,7 +62,7 @@ return function(conf, menu, wallpaper)
 
         -- Each screen has its own tag table.
         -- awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-        awful.tag(my_tags, s, conf.layouts)
+        awful.tag(my_tags, s, my_layouts)
 
         -- Create a promptbox for each screen
         s.my_promptbox = awful.widget.prompt()
@@ -121,7 +107,7 @@ return function(conf, menu, wallpaper)
             },
         }
 
-        s.tags[#s.tags]:view_only()
+        s.tags[default_tag or #s.tags]:view_only()
     end)
     -- }}}
 end

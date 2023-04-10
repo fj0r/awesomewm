@@ -57,11 +57,8 @@ modules.screen(conf, menu, wallpaper)
 
 modules.mouse()
 
-root.keys(modules.global_keys(conf, modkey, wallpaper))
+root.keys(modules.global(conf, modkey, wallpaper).keys)
 
 -- Rules to apply to new clients (through the "manage" signal).
-awful.rules.rules = modules.rules(conf, modkey, modules.client_keys(modkey))
+awful.rules.rules = modules.rules(conf, modules.client(modkey))
 
-for _, rule in ipairs(conf.rules) do
-    table.insert(awful.rules.rules, rule)
-end

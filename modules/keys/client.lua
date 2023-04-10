@@ -2,7 +2,7 @@ local awful = require("awful")
 local gears = require("gears")
 
 return function(meta)
-    return gears.table.join(
+    local keys = gears.table.join(
         awful.key({ meta, "Control" }, "Return",
             function(c)
                 c.fullscreen = not c.fullscreen
@@ -39,23 +39,40 @@ return function(meta)
                 c:raise()
             end,
             { description = "(un)maximize horizontally", group = "client" })
-    -- awful.key({ meta,           }, ",",
-    --     function (c)
-    --         -- The client currently has the input focus, so it cannot be
-    --         -- minimized, since minimized clients can't have the focus.
-    --         c.minimized = true
-    --     end ,
-    --     {description = "minimize", group = "client"}),
-    -- awful.key({ meta, "Control" }, ",",
-    --     function ()
-    --         local c = awful.client.restore()
-    --         -- Focus restored client
-    --         if c then
-    --           c:emit_signal(
-    --               "request::activate", "key.unminimize", {raise = true}
-    --           )
-    --         end
-    --     end,
-    --     {description = "restore minimized", group = "client"})
+        --[[
+        awful.key({ meta,           }, ",",
+            function (c)
+                -- The client currently has the input focus, so it cannot be
+                -- minimized, since minimized clients can't have the focus.
+                c.minimized = true
+            end ,
+            {description = "minimize", group = "client"}),
+        awful.key({ meta, "Control" }, ",",
+            function ()
+                local c = awful.client.restore()
+                -- Focus restored client
+                if c then
+                  c:emit_signal(
+                      "request::activate", "key.unminimize", {raise = true}
+                  )
+                end
+            end,
+            {description = "restore minimized", group = "client"})
+        --]]
     )
+
+    local buttons = gears.table.join(
+        awful.button({}, 1, function(c)
+            c:emit_signal("request::activate", "mouse_click", { raise = true })
+        end),
+        awful.button({ meta }, 1, function(c)
+            c:emit_signal("request::activate", "mouse_click", { raise = true })
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ meta }, 3, function(c)
+            c:emit_signal("request::activate", "mouse_click", { raise = true })
+            awful.mouse.client.resize(c)
+        end)
+    )
+    return { keys = keys, buttons = buttons }
 end

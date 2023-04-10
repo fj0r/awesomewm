@@ -56,7 +56,8 @@ local M = {
         },
         {
             name = '3',
-            layout = 'centerwork'
+            layout = 'centerwork',
+            default = true
         },
         {
             name = '4',

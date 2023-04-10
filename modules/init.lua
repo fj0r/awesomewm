@@ -1,8 +1,8 @@
 local keys = require('modules.keys')
 
 return {
-    global_keys      = keys.global,
-    client_keys      = keys.client,
+    global           = keys.global,
+    client           = keys.client,
     autorun          = require('modules.autorun'),
     handle_error     = require('modules.error'),
     theme            = require('modules.theme'),

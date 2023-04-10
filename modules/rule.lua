@@ -1,23 +1,8 @@
 local beautiful = require("beautiful")
 local awful = require("awful")
-local gears = require("gears")
 
-return function(conf, modkey, clientkeys)
-    local clientbuttons = gears.table.join(
-        awful.button({}, 1, function(c)
-            c:emit_signal("request::activate", "mouse_click", { raise = true })
-        end),
-        awful.button({ modkey }, 1, function(c)
-            c:emit_signal("request::activate", "mouse_click", { raise = true })
-            awful.mouse.client.move(c)
-        end),
-        awful.button({ modkey }, 3, function(c)
-            c:emit_signal("request::activate", "mouse_click", { raise = true })
-            awful.mouse.client.resize(c)
-        end)
-    )
-
-    return {
+return function(conf, client)
+    local my_rules = {
         -- All clients will match this rule.
         {
             rule = {},
@@ -26,8 +11,8 @@ return function(conf, modkey, clientkeys)
                 border_color = beautiful.border_normal,
                 focus = awful.client.focus.filter,
                 raise = true,
-                keys = clientkeys,
-                buttons = clientbuttons,
+                keys = client.keys,
+                buttons = client.buttons,
                 screen = awful.screen.preferred,
                 placement = awful.placement.no_overlap + awful.placement.no_offscreen
             }
@@ -64,4 +49,32 @@ return function(conf, modkey, clientkeys)
         -- { rule = { class = "Firefox" },
         --   properties = { screen = 1, tag = "2" } },
     }
+
+    for _, rule in ipairs(conf.rules) do
+        table.insert(my_rules, rule)
+    end
+
+    for k, v in ipairs(conf.tags) do
+        for _, term in ipairs(v.apps or {}) do
+            local rule = {}
+            local count = 0
+            for p in ipairs({ 'instance', 'class', 'name', 'role' }) do
+                if term[p] then
+                    rule[p] = term[p]
+                    term[p] = nil
+                    count = count + 1
+                end
+            end
+            if count > 0 then
+                term.screen = term.screen or 1
+                term.tag = k
+                table.insert(my_rules, {
+                    rule = rule,
+                    properties = term
+                })
+            end
+        end
+    end
+
+    return my_rules
 end
