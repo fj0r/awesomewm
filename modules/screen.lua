@@ -7,6 +7,8 @@ local my_clock = utils.clock
 local monitor = utils.monitor
 -- Keyboard map indicator and switcher
 local my_keyboardlayout = awful.widget.keyboardlayout()
+local client = client
+local screen = screen
 
 local tasklist_buttons = gears.table.join(
     awful.button({}, 1, function(c)

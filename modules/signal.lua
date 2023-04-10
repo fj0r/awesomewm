@@ -1,6 +1,8 @@
 local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
+local client = client
+local awesome = awesome
 
 return function()
     -- TODO: spawn initiated

@@ -11,5 +11,4 @@ return {
     rules            = require('modules.rule'),
     signal           = require('modules.signal'),
     screen           = require('modules.screen'),
-    mouse            = require('modules.mouse'),
 }

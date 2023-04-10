@@ -6,6 +6,7 @@ local cyclefocus = require("cyclefocus")
 local lain = require("lain")
 local client = client
 local awesome = awesome
+local screen = screen
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -47,7 +48,7 @@ return function(conf, meta, wallpaper)
     local shift = 'Shift'
     local tab = 'Tab'
 
-    return gears.table.join(
+    local keys = gears.table.join(
         awful.key({ meta, }, "w", hotkeys_popup.show_help,
             { description = "show help", group = "awesome" }),
         awful.key({ meta, }, "Left", awful.tag.viewprev,
@@ -201,4 +202,12 @@ return function(conf, meta, wallpaper)
     -- awful.key({ modkey },            "r",     function () awful.screen.focused().my_promptbox:run() end,
     --          {description = "run prompt", group = "launcher"}),
     )
+
+    local buttons = gears.table.join(
+        awful.button({}, 3, function() my_mainmenu:toggle() end),
+        awful.button({}, 4, awful.tag.viewnext),
+        awful.button({}, 5, awful.tag.viewprev)
+    )
+
+    return { keys = keys, buttons = buttons }
 end

@@ -1,5 +1,6 @@
 local beautiful = require("beautiful")
 local gears = require("gears")
+local client = client
 
 return function(conf)
     -- {{{ Variable definitions

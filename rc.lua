@@ -55,9 +55,9 @@ awful.layout.layouts = {
 modules.screen(conf, menu, wallpaper)
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 
-modules.mouse()
-
-root.keys(modules.global(conf, modkey, wallpaper).keys)
+local global = modules.global(conf, modkey, wallpaper)
+root.buttons(global.buttons)
+root.keys(global.keys)
 
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = modules.rules(conf, modules.client(modkey))

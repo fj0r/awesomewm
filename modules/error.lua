@@ -1,3 +1,6 @@
+local awesome = awesome
+local naughty = require('naughty')
+
 return function()
     -- {{{ Error handling
     -- Check if awesome encountered an error during startup and fell back to
