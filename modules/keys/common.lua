@@ -37,12 +37,6 @@ return function(conf, meta, wallpaper)
     local terminal = conf.terminal or "x-terminal-emulator"
     local ide = conf.ide or "vim"
 
-    local quake = lain.util.quake {
-        app = terminal,
-        settings = function(c) c.sticky = false end,
-        height = 0.3
-    }
-
     local alt = 'Mod1'
     local ctrl = 'Control'
     local shift = 'Shift'
@@ -56,10 +50,10 @@ return function(conf, meta, wallpaper)
         awful.key({ meta, }, "Right", awful.tag.viewnext,
             { description = "view next", group = "tag" }),
         -- Standard program
-        awful.key({ meta, }, "Return", function() awful.spawn(terminal) end,
+        awful.key({ meta, }, "q", function() awful.spawn(terminal) end,
             { description = "open a terminal", group = "launcher" }),
-        awful.key({ meta, }, "d", function() awful.spawn(ide) end,
-            { description = "open a development envrionment", group = "launcher" }),
+        awful.key({ meta, }, "Return", function() awful.spawn(ide) end,
+            { description = "enter development envrionment", group = "launcher" }),
         awful.key({ meta, ctrl }, "r", awesome.restart,
             { description = "reload awesome", group = "awesome" }),
         awful.key({ meta, shift }, "q", awesome.quit,
@@ -74,14 +68,14 @@ return function(conf, meta, wallpaper)
                 .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/'):rgb"
                 .. " --image /dev/stdin"
             local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
-            awful.spawn('bash -c "' .. cmd .. ' && '.. sleep .. '"')
+            awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
         end,
             { description = "lock screen", group = "awesome" }),
         awful.key({ meta, ctrl }, "/", function()
             local cmd = "i3lock -B5 -e -k --date-str='%Y-%m-%d [%w]'"
                 .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
             local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
-            awful.spawn('bash -c "' .. cmd .. ' && '.. sleep .. '"')
+            awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
         end,
             { description = "lock screen", group = "awesome" }),
         awful.key({ meta, }, ".", function() machi.default_editor.start_interactive() end,
@@ -122,7 +116,7 @@ return function(conf, meta, wallpaper)
                 }
             end,
             { description = "lua execute prompt", group = "awesome" }),
-        awful.key({ meta }, "x",
+        awful.key({ meta, shift }, "x",
             function()
                 awful.spawn.easy_async_with_shell(
                     "xprop | grep -e '^\\(WM_NAME\\|WM_CLASS\\)'",
@@ -139,8 +133,6 @@ return function(conf, meta, wallpaper)
                 awful.spawn("xprop")
             end,
             { description = "xprop", group = "awesome" }),
-        awful.key({ meta, }, "q", function() quake:toggle() end,
-            { description = "quake", group = "launcher" }),
 
 
         awful.key({ meta, }, "j",

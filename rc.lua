@@ -61,4 +61,3 @@ root.keys(global.keys)
 
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = modules.rules(conf, modules.client(modkey))
-
