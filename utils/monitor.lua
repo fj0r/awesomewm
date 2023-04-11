@@ -27,6 +27,7 @@ local function new_dual(config)
             scale = config.scale,
             color = v.color,
             widget = wibox.widget.graph,
+            opacity = 0.5,
             width = 60,
         }
         table.insert(widgets, k % 2 == 1 and g or wibox.container.mirror(g, { vertical = true }))
