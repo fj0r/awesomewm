@@ -34,7 +34,7 @@ local function new_dual(config)
             scale = config.scale,
             color = v.color,
             widget = wibox.widget.graph,
-            opacity = 0.5,
+            opacity = config.vectical and 1 or 0.5,
             width = 60,
         }
         table.insert(widgets, k % 2 == 1 and g or wibox.container.mirror(g, { vertical = true }))
@@ -122,18 +122,18 @@ local net = function(config)
         max_value = bandwidth * MB,
         metrics = {
             {
+                color = '#ff964f',
+                src = lain.widget.net,
+                value = function() return net_now.sent + 0 end,
+                format = format_net('up', bandwidth .. 'M')
+            },
+            {
                 color = '#08787f',
                 reflection = true,
                 src = lain.widget.net,
                 value = function() return net_now.received + 0 end,
                 format = format_net('down', bandwidth .. 'M')
             },
-            {
-                color = '#ff964f',
-                src = lain.widget.net,
-                value = function() return net_now.sent + 0 end,
-                format = format_net('up', bandwidth .. 'M')
-            }
         }
     }
 end
@@ -301,7 +301,7 @@ end
 return function(config)
     return wibox.widget {
         layout = wibox.layout.fixed.vertical,
-        wibox.container.margin(cpu_mem(config), 0, 0, 2, 1),
+        wibox.container.margin(cpu_mem(config), 0, 0, 2, 2),
         wibox.container.margin(net(config), 0, 0, 0, 2),
         wibox.container.margin(battery(), 2, 2, 1, 1),
         fsw(config),
