@@ -18,6 +18,13 @@ local attach_tooltip = function(obj, fun)
     }
 end
 
+local rotate = function(w)
+    local c = wibox.container.rotate()
+    c:set_direction('west')
+    c:set_widget(w)
+    return c
+end
+
 local function new_dual(config)
     local widgets = {}
     for k = #config.metrics, 1, -1 do
@@ -37,7 +44,17 @@ local function new_dual(config)
             end
         }
     end
-    widgets.layout = wibox.layout.stack
+    if config.vectical then
+        local vw = {}
+        for k = #widgets, 1, -1 do
+            table.insert(vw, widgets[k])
+        end
+        widgets = vw
+        widgets.layout = wibox.layout.flex.vertical
+    else
+        widgets.layout = wibox.layout.stack
+    end
+
     local m = wibox.widget(widgets)
 
     attach_tooltip(m, function()
@@ -49,11 +66,17 @@ local function new_dual(config)
         end
         return text
     end)
-    return m
+
+    if config.vectical then
+        return m
+    else
+        return rotate(m)
+    end
 end
 
-local cpu_mem = function()
+local cpu_mem = function(config)
     return new_dual {
+        vectical = config.vectical,
         metrics = {
             {
                 color = '#728639',
@@ -95,6 +118,7 @@ end
 local net = function(config)
     local bandwidth = config.bandwidth or 10
     return new_dual {
+        vectical = config.vectical,
         max_value = bandwidth * MB,
         metrics = {
             {
@@ -274,18 +298,11 @@ local fsw = function(config)
     return wibox.widget(x)
 end
 
-local rotate = function(w)
-    local c = wibox.container.rotate()
-    c:set_direction('west')
-    c:set_widget(w)
-    return c
-end
-
 return function(config)
     return wibox.widget {
         layout = wibox.layout.fixed.vertical,
-        wibox.container.margin(rotate(cpu_mem()), 0, 0, 2, 1),
-        wibox.container.margin(rotate(net(config)), 0, 0, 0, 2),
+        wibox.container.margin(cpu_mem(config), 0, 0, 2, 1),
+        wibox.container.margin(net(config), 0, 0, 0, 2),
         wibox.container.margin(battery(), 2, 2, 1, 1),
         fsw(config),
     }
