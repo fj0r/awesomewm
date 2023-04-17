@@ -100,39 +100,38 @@ local two_digit = function(f)
 end
 local GB = 1024 * 1024
 local MB = 1024
-local format_net = function(txt, total)
-    return function(v)
-        local value = v
+local format_net = function(txt, alt)
+    return function(_)
+        local value = alt()
         local unit = 'K'
-        if v > GB then
-            value = v / GB
+        if value > GB then
+            value = value / GB
             unit = 'G'
-        elseif v > MB then
-            value = v / MB
+        elseif value > MB then
+            value = value / MB
             unit = 'M'
         end
-        return txt .. ': <b>' .. two_digit(value) .. unit .. '</b>/' .. total
+        return txt .. ': <b>' .. two_digit(value) .. unit .. '</b>'
     end
 end
 
 local net = function(config)
-    local bandwidth = config.bandwidth or 10
     return new_dual {
         vectical = config.vectical,
-        max_value = bandwidth * MB,
+        max_value = config.bandwidth or 6,
         metrics = {
             {
                 color = '#ff964f',
                 src = lain.widget.net,
-                value = function() return net_now.sent + 0 end,
-                format = format_net('up', bandwidth .. 'M')
+                value = function() return math.log10(net_now.sent + 0) end,
+                format = format_net('up', function() return net_now.sent + 0 end)
             },
             {
                 color = '#08787f',
                 reflection = true,
                 src = lain.widget.net,
-                value = function() return net_now.received + 0 end,
-                format = format_net('down', bandwidth .. 'M')
+                value = function() return math.log10(net_now.received + 0) end,
+                format = format_net('down', function() return net_now.received + 0 end)
             },
         }
     }
@@ -155,14 +154,14 @@ local color_rank = color_generator {
 
 local function new_pie(config)
     local c = wibox.widget {
-        checked       = false,
-        bg            = '#888',
-        color         = beautiful.bg_normal,
-        border_color  = beautiful.bg_normal,
-        border_width  = 6,
-        paddings      = 3,
-        shape         = gears.shape.circle,
-        widget        = wibox.widget.checkbox
+        checked      = false,
+        bg           = '#888',
+        color        = beautiful.bg_normal,
+        border_color = beautiful.bg_normal,
+        border_width = 6,
+        paddings     = 3,
+        shape        = gears.shape.circle,
+        widget       = wibox.widget.checkbox
     }
     local m = wibox.widget {
         colors = {},

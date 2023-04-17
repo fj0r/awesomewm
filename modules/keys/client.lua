@@ -39,7 +39,7 @@ return function(meta)
                 c:raise()
             end,
             { description = "(un)maximize horizontally", group = "client" })
-        --[[
+    --[[
         awful.key({ meta,           }, ",",
             function (c)
                 -- The client currently has the input focus, so it cannot be

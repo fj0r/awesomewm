@@ -35,7 +35,7 @@ local M = {
     sidebar = "right",
     monitor = {
         vectical = true,
-        bandwidth = 10,
+        bandwidth = 6,
         partitions = 'auto'
     },
     layouts = {},
