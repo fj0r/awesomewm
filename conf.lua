@@ -32,7 +32,10 @@ local M = {
         -- "/usr/lib/polkit-1/polkitd",
         "ibus-daemon --xim --replace --daemonize",
     },
-    sidebar = "right",
+    sidebar = {
+        position = "right",
+        width = 20,
+    },
     monitor = {
         vectical = true,
         bandwidth = 6,
@@ -94,6 +97,7 @@ local M = {
     },
     theme = {
         gap = 0,
+        font = "JetBrains Mono 6",
         color = {
             urgent = { bg = '#dde175' },
             focus = { bg = '#579c8e', fg = 'black' },

@@ -42,7 +42,7 @@ end
 return function(conf, menu, wallpaper)
     local set_wallpaper = wallpaper_setter(wallpaper)
 
-    local rotated_widget = utils.rotate(conf.sidebar)
+    local rotated_widget = utils.rotate(conf.sidebar.position)
     screen.connect_signal("property::geometry", set_wallpaper)
 
     local default_tag = nil
@@ -87,7 +87,8 @@ return function(conf, menu, wallpaper)
         })
 
         -- Create the wibox
-        s.my_wibox = awful.wibar { position = conf.sidebar, screen = s }
+        conf.sidebar['screen'] = s
+        s.my_wibox = awful.wibar(conf.sidebar)
 
         -- Add widgets to the wibox
         s.my_wibox:setup {
