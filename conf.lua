@@ -97,7 +97,8 @@ local M = {
     },
     theme = {
         gap = 0,
-        font = "JetBrains Mono 6",
+        font = "JetBrains Mono 9",
+        notification_font = "JetBrains Mono 12",
         color = {
             urgent = { bg = '#dde175' },
             focus = { bg = '#579c8e', fg = 'black' },

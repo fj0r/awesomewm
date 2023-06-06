@@ -6,8 +6,9 @@ return function(conf)
     -- {{{ Variable definitions
     -- Themes define colours, icons, font and wallpapers.
     beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
-    beautiful.font = conf.theme.font
-    beautiful.useless_gap = conf.theme.gap
+    beautiful.font               = conf.theme.font
+    beautiful.notification_font  = conf.theme.notification_font
+    beautiful.useless_gap        = conf.theme.gap
 
     local normal_bg              = conf.theme.color.normal.bg or beautiful.bg_normal
     local normal_fg              = conf.theme.color.normal.fg or beautiful.fg_normal
