@@ -114,10 +114,10 @@ local M = {
     editor = 'nvim',
     terminal = 'wezterm',
     ide = "bash -c '"
-        .. "export NVIM_PRESET=x SHELL=/usr/local/bin/nu; "
+        .. "export NVIM_PRESET=x SHELL=/usr/local/bin/nu TERM=screen-256color; "
         .. "export PATH=/opt/node/bin:$HOME/.local/bin:$PATH; "
-        .. "wezterm --config-file $HOME/Configuration/wezterm/nvim.lua"
-        --.. "/usr/local/bin/neovide --multigrid --maximized"
+        --.. "wezterm --config-file $HOME/Configuration/wezterm/nvim.lua"
+        .. "/usr/local/bin/neovide --multigrid --maximized"
         .. "'",
     -- inspect with xprop
     floating = {
