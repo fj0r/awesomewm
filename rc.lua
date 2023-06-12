@@ -1,3 +1,7 @@
+local version = {}
+for t in string.gmatch(awesome.version, '[0-9]+') do
+    table.insert(version, tonumber(t))
+end
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -20,6 +24,7 @@ modules.theme(conf)
 local menu = modules.menu(conf)
 local wallpaper = modules.select_wallpaper(conf)
 modules.signal()
+modules.notification(conf, version)
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.

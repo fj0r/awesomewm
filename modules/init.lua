@@ -11,4 +11,5 @@ return {
     rules            = require('modules.rule'),
     signal           = require('modules.signal'),
     screen           = require('modules.screen'),
+    notification     = require('modules.notification'),
 }
