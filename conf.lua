@@ -28,7 +28,7 @@ local M = {
         --"source ~/.config/xrandr.rc",
     },
     autorun_once = {
-        "gnome-session --systemd-service",
+        -- "gnome-session --systemd-service",
         -- "/usr/lib/polkit-1/polkitd",
         "ibus-daemon --xim --replace --daemonize",
     },
