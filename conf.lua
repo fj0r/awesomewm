@@ -118,7 +118,8 @@ local M = {
     terminal = 'wezterm',
     ide = "bash -c '"
         .. "export NVIM_PRESET=x SHELL=/usr/local/bin/nu TERM=screen-256color; "
-        .. "export PATH=/opt/node/bin:$HOME/.local/bin:$PATH; "
+        .. "export PATH=/opt/go/bin:/opt/language-server/rust/bin:/opt/language-server/lua/bin:/opt/node/bin:$HOME/.local/bin:$PATH; "
+        .. "export LS_ROOT=/opt/language-server; "
         --.. "wezterm --config-file $HOME/Configuration/wezterm/nvim.lua"
         .. "/usr/local/bin/neovide --multigrid --maximized"
         .. "'",
