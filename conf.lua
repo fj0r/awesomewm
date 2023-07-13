@@ -21,6 +21,10 @@ local palette = {
     }
 }
 
+local env_path = "export NVIM_LEVEL=x SHELL=/usr/local/bin/nu TERM=screen-256color; "
+              .. "export PATH=/opt/node/bin:/opt/go/bin:/opt/language-server/rust/bin:/opt/language-server/lua/bin:/opt/node/bin:$HOME/.local/bin:$PATH; "
+              .. "export LS_ROOT=/opt/language-server; "
+
 local M = {
     autorun = {
         "setxkbmap -option 'ctrl:swapcaps'",
@@ -116,10 +120,10 @@ local M = {
     },
     editor = 'nvim',
     terminal = 'wezterm',
-    ide = "bash -c '"
-        .. "export NVIM_LEVEL=x SHELL=/usr/local/bin/nu TERM=screen-256color; "
-        .. "export PATH=/opt/go/bin:/opt/language-server/rust/bin:/opt/language-server/lua/bin:/opt/node/bin:$HOME/.local/bin:$PATH; "
-        .. "export LS_ROOT=/opt/language-server; "
+    browser = "bash -c '" .. env_path
+        .. "qutebrowser"
+        .. "'",
+    ide = "bash -c '" .. env_path
         --.. "wezterm --config-file $HOME/Configuration/wezterm/nvim.lua"
         .. "/usr/local/bin/neovide --multigrid --maximized"
         .. "'",

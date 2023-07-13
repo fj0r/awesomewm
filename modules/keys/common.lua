@@ -35,6 +35,7 @@ end
 
 return function(conf, meta, wallpaper)
     local terminal = conf.terminal or "x-terminal-emulator"
+    local browser = conf.browser or 'vivaldi'
     local ide = conf.ide or "vim"
 
     local alt = 'Mod1'
@@ -52,6 +53,8 @@ return function(conf, meta, wallpaper)
         -- Standard program
         awful.key({ meta, }, "q", function() awful.spawn(terminal) end,
             { description = "open a terminal", group = "launcher" }),
+        awful.key({ meta, }, "b", function() awful.spawn(browser) end,
+            { description = "open a browser", group = "launcher" }),
         awful.key({ meta, }, "Return", function() awful.spawn(ide) end,
             { description = "enter development envrionment", group = "launcher" }),
         awful.key({ meta, ctrl }, "r", awesome.restart,
