@@ -55,8 +55,20 @@ return function(conf, meta, wallpaper)
             { description = "open a terminal", group = "launcher" }),
         awful.key({ meta, }, "b", function() awful.spawn(browser) end,
             { description = "open a browser", group = "launcher" }),
-        awful.key({ meta, }, "Return", function() awful.spawn(ide) end,
+        awful.key({ meta, }, "Return", function()
+                awful.prompt.run({ prompt = "Remote: " },
+                    awful.screen.focused().my_promptbox.widget,
+                    function(remote)
+                        if #remote > 0 then
+                            awful.spawn(string.sub(ide, 1, #ide - 1) .. ' --server ' .. remote .. "'")
+                        else
+                            awful.spawn(ide)
+                        end
+                    end)
+            end,
             { description = "enter development envrionment", group = "launcher" }),
+
+
         awful.key({ meta, ctrl }, "r", awesome.restart,
             { description = "reload awesome", group = "awesome" }),
         awful.key({ meta, shift }, "q", awesome.quit,
