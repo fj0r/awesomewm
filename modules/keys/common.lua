@@ -4,6 +4,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local machi = require("layout-machi")
 local cyclefocus = require("cyclefocus")
 local lain = require("lain")
+local say = require("say")
 local client = client
 local awesome = awesome
 local screen = screen
@@ -60,15 +61,20 @@ return function(conf, meta, wallpaper)
                     awful.screen.focused().my_promptbox.widget,
                     function(remote)
                         if #remote > 0 then
+                            local title = " +\"set title titlestring={}\""
                             if remote:match(':[0-9]+$') then
-                                awful.spawn(string.sub(ide, 1, #ide - 1)
-                                .. ' --server ' .. remote .. "'", { name = remote })
+                                local cmd = ide:gsub('{}',
+                                    ' --server ' .. remote
+                                    .. " -- " .. title:gsub('{}', remote))
+                                awful.spawn(cmd, { name = remote })
                             else
-                                awful.spawn(string.sub(ide, 1, #ide - 1)
-                                .. ' ' .. remote .. "'", { name = remote })
+                                local cmd = ide:gsub('{}',
+                                    title:gsub('{}', remote)
+                                    .. " -- " .. remote)
+                                awful.spawn(cmd, { name = remote })
                             end
                         else
-                            awful.spawn(ide)
+                            awful.spawn(ide:gsub('{}', ''))
                         end
                     end)
             end,
