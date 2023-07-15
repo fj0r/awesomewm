@@ -60,7 +60,13 @@ return function(conf, meta, wallpaper)
                     awful.screen.focused().my_promptbox.widget,
                     function(remote)
                         if #remote > 0 then
-                            awful.spawn(string.sub(ide, 1, #ide - 1) .. ' --server ' .. remote .. "'")
+                            if remote:match(':[0-9]+$') then
+                                awful.spawn(string.sub(ide, 1, #ide - 1)
+                                .. ' --server ' .. remote .. "'", { name = remote })
+                            else
+                                awful.spawn(string.sub(ide, 1, #ide - 1)
+                                .. ' ' .. remote .. "'", { name = remote })
+                            end
                         else
                             awful.spawn(ide)
                         end
