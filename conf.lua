@@ -119,7 +119,8 @@ local M = {
         powerline_taglist = false
     },
     editor = 'nvim',
-    terminal = 'wezterm',
+    -- terminal = 'wezterm',
+    terminal = 'alacritty',
     browser = "bash -c '" .. env_path .. "qutebrowser'",
     ide = "bash -c '" .. env_path
         .. "/usr/local/bin/neovide --multigrid --maximized {}'",
