@@ -63,6 +63,9 @@ return function(conf, meta, wallpaper)
                         if #remote > 0 then
                             local title = " +\"set title titlestring={}\""
                             if remote:match(':[0-9]+$') then
+                                if string.sub(remote, 1, 1) == ':' then
+                                    remote = 'localhost' .. remote
+                                end
                                 local cmd = ide:gsub('{}',
                                     ' --server ' .. remote
                                     .. " -- " .. title:gsub('{}', remote))
