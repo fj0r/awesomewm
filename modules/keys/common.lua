@@ -32,6 +32,7 @@ local cycle_filter_legacy = function(c, source_c)
     end
     return false
 end
+
 local open_with_vim = function(prog)
     return function(args)
         if #args > 0 then
@@ -83,14 +84,19 @@ return function(conf, meta, wallpaper)
                     "cat ~/.cache/rofi/nvim-server | sort | uniq -c | sort -nr | awk '{print $2}'",
                     function(history)
                         awful.spawn.easy_async_with_shell(
-                            "echo \"" .. history .. "\" | rofi -dmenu -p 'neovim open'",
+                            "echo \"new\n" .. history .. "\" | rofi -dmenu -p 'neovim open'",
                             function(out)
-                                local h = io.open(os.getenv('HOME') .. '/.cache/rofi/nvim-server', 'a')
-                                if h ~= nil then
-                                    h:write(out)
-                                    h:close()
+                                if out == "new\n" then
+                                    open_with_vim(ide)('')
+                                elseif out == "" then
+                                else
+                                    local h = io.open(os.getenv('HOME') .. '/.cache/rofi/nvim-server', 'a')
+                                    if h ~= nil then
+                                        h:write(out)
+                                        h:close()
+                                    end
+                                    open_with_vim(ide)(out:gsub("\n", ''))
                                 end
-                                open_with_vim(ide)(out:gsub("\n", ''))
                             end
                         )
                     end
