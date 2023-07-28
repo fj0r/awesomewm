@@ -32,7 +32,29 @@ local cycle_filter_legacy = function(c, source_c)
     end
     return false
 end
-
+local open_with_vim = function(prog)
+    return function(args)
+        if #args > 0 then
+            local title = " +\"set title titlestring={}\""
+            if args:match(':[0-9]+$') then
+                if string.sub(args, 1, 1) == ':' then
+                    args = 'localhost' .. args
+                end
+                local cmd = prog:gsub('{}',
+                    ' --server ' .. args
+                    .. " -- " .. title:gsub('{}', args))
+                awful.spawn(cmd, { name = args })
+            else
+                local cmd = prog:gsub('{}',
+                    title:gsub('{}', args)
+                    .. " -- " .. args)
+                awful.spawn(cmd, { name = args })
+            end
+        else
+            awful.spawn(prog:gsub('{}', ''))
+        end
+    end
+end
 
 return function(conf, meta, wallpaper)
     local terminal = conf.terminal or "x-terminal-emulator"
@@ -57,56 +79,52 @@ return function(conf, meta, wallpaper)
         awful.key({ meta, }, "b", function() awful.spawn(browser) end,
             { description = "open a browser", group = "launcher" }),
         awful.key({ meta, }, "Return", function()
+                awful.spawn.easy_async_with_shell(
+                    "cat ~/.cache/rofi/nvim-server | sort | uniq -c | sort -nr | awk '{print $2}'",
+                    function(history)
+                        awful.spawn.easy_async_with_shell(
+                            "echo \"" .. history .. "\" | rofi -dmenu -p 'neovim open'",
+                            function(out)
+                                local h = io.open(os.getenv('HOME') .. '/.cache/rofi/nvim-server', 'a')
+                                if h ~= nil then
+                                    h:write(out)
+                                    h:close()
+                                end
+                                open_with_vim(ide)(out:gsub("\n", ''))
+                            end
+                        )
+                    end
+                )
+                --[[
                 awful.prompt.run({ prompt = "Remote: " },
                     awful.screen.focused().my_promptbox.widget,
-                    function(remote)
-                        if #remote > 0 then
-                            local title = " +\"set title titlestring={}\""
-                            if remote:match(':[0-9]+$') then
-                                if string.sub(remote, 1, 1) == ':' then
-                                    remote = 'localhost' .. remote
-                                end
-                                local cmd = ide:gsub('{}',
-                                    ' --server ' .. remote
-                                    .. " -- " .. title:gsub('{}', remote))
-                                awful.spawn(cmd, { name = remote })
-                            else
-                                local cmd = ide:gsub('{}',
-                                    title:gsub('{}', remote)
-                                    .. " -- " .. remote)
-                                awful.spawn(cmd, { name = remote })
-                            end
-                        else
-                            awful.spawn(ide:gsub('{}', ''))
-                        end
-                    end)
+                    open_with_vim(ide))
+                --]]
             end,
             { description = "enter development envrionment", group = "launcher" }),
-
-
         awful.key({ meta, ctrl }, "r", awesome.restart,
             { description = "reload awesome", group = "awesome" }),
         awful.key({ meta, shift }, "q", awesome.quit,
             { description = "quit awesome", group = "awesome" }),
         awful.key({ meta, shift }, "/", function()
-            local cmd = "convert '" .. wallpaper .. "' -resize"
-                .. " $(xdpyinfo | grep dimensions |"
-                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/') RGB:-"
-                .. " | i3lock -k --date-str='%Y-%m-%d [%w]' -e"
-                .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
-                .. " --raw $(xdpyinfo | grep dimensions |"
-                .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/'):rgb"
-                .. " --image /dev/stdin"
-            local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
-            awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
-        end,
+                local cmd = "convert '" .. wallpaper .. "' -resize"
+                    .. " $(xdpyinfo | grep dimensions |"
+                    .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/') RGB:-"
+                    .. " | i3lock -k --date-str='%Y-%m-%d [%w]' -e"
+                    .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
+                    .. " --raw $(xdpyinfo | grep dimensions |"
+                    .. " sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\\1/'):rgb"
+                    .. " --image /dev/stdin"
+                local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
+                awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
+            end,
             { description = "lock screen", group = "awesome" }),
         awful.key({ meta, ctrl }, "/", function()
-            local cmd = "i3lock -B5 -e -k --date-str='%Y-%m-%d [%w]'"
-                .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
-            local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
-            awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
-        end,
+                local cmd = "i3lock -B5 -e -k --date-str='%Y-%m-%d [%w]'"
+                    .. " --time-color=#FFFFFFFF --date-color=#FFFFFFFF"
+                local sleep = 'bash -c "echo mem | sudo tee /sys/power/state > /dev/null"'
+                awful.spawn('bash -c "' .. cmd .. ' && ' .. sleep .. '"')
+            end,
             { description = "lock screen", group = "awesome" }),
         awful.key({ meta, }, ".", function() machi.default_editor.start_interactive() end,
             { description = "edit the current layout if it is a machi layout", group = "layout" }),
@@ -187,7 +205,6 @@ return function(conf, meta, wallpaper)
             { description = "swap with previous client by index", group = "client" }),
         awful.key({ meta, }, "u", awful.client.urgent.jumpto,
             { description = "jump to urgent client", group = "client" }),
-
         awful.key({ meta, }, "/", function() machi.switcher.start(client.focus) end,
             { description = "switch between windows for a machi layout", group = "layout" }),
         awful.key({ meta, }, "l", function() awful.tag.incmwfact(0.05) end,
@@ -206,8 +223,6 @@ return function(conf, meta, wallpaper)
             { description = "select next", group = "layout" }),
         awful.key({ meta, shift }, "n", function() awful.layout.inc(-1) end,
             { description = "select previous", group = "layout" }),
-
-
         awful.key({ meta, }, "z", function() awful.spawn("zeal") end,
             { description = "zeal", group = "launcher" }),
         -- gpick

@@ -34,6 +34,7 @@ local M = {
     autorun_once = {
         -- "gnome-session --systemd-service",
         -- "/usr/lib/polkit-1/polkitd",
+        "mkdir -p ~/.cache/rofi/",
         "ibus-daemon --xim --replace --daemonize",
     },
     sidebar = {
