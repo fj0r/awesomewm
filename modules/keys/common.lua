@@ -80,8 +80,9 @@ return function(conf, meta, wallpaper)
         awful.key({ meta, }, "b", function() awful.spawn(browser) end,
             { description = "open a browser", group = "launcher" }),
         awful.key({ meta, }, "Return", function()
+                local history_file = os.getenv("HOME") .. "/.cache/rofi/nvim-server"
                 awful.spawn.easy_async_with_shell(
-                    "cat ~/.cache/rofi/nvim-server | sort | uniq -c | sort -nr | awk '{print $2}'",
+                    "cat " .. history_file .. " | sort | uniq -c | sort -nr | head -9 | awk '{print $2}'",
                     function(history)
                         awful.spawn.easy_async_with_shell(
                             "echo \"new\n" .. history .. "\" | rofi -dmenu -p 'neovim open'",
@@ -89,8 +90,15 @@ return function(conf, meta, wallpaper)
                                 if out == "new\n" then
                                     open_with_vim(ide)('')
                                 elseif out == "" then
+                                    awful.spawn.with_shell(
+                                        "t=$(mktemp); " ..
+                                        "cat " ..
+                                        history_file ..
+                                        " | sort | uniq -c | sort -nr | head -9 | awk '{print $2}' > $t; " ..
+                                        "mv -f $t " .. history_file
+                                    )
                                 else
-                                    local h = io.open(os.getenv('HOME') .. '/.cache/rofi/nvim-server', 'a')
+                                    local h = io.open(history_file, 'a')
                                     if h ~= nil then
                                         h:write(out)
                                         h:close()
