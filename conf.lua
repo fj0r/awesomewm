@@ -123,9 +123,7 @@ local M = {
     -- terminal = 'wezterm',
     terminal = 'alacritty',
     browser = "bash -c '" .. env_path .. "qutebrowser'",
-    ide = "bash -c '" .. env_path
-        .. "/usr/local/bin/neovide --multigrid --maximized {}'",
-        --.. "wezterm --config-file $HOME/Configuration/wezterm/nvim.lua"
+    envfile = '~/Configuration/nushell/scripts/__env.nu',
     -- inspect with xprop
     floating = {
         instance = {
