@@ -4,6 +4,11 @@
 
 source ~/Configuration/nushell/scripts/__env.nu
 
+# https://github.com/davatorium/rofi/blob/next/doc/rofi-script.5.markdown
+def set_opt [mode option] {
+    print $"(char -i 0)($mode)(char us)($option)"
+}
+
 let history_file = $"($env.HOME)/.cache/rofi.sqlite"
 
 if not ($history_file | path exists) {
@@ -50,6 +55,7 @@ def main [input?: string] {
         for p in $env.PATH {
             print $p
         }
+    } else if ($input | str starts-with '>') {
     } else {
         $"insert into nvim_history\(cmd\) values \('($input)'\)
         on conflict\(cmd\) do
