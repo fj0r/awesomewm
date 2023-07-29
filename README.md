@@ -22,6 +22,8 @@
             - `-kb-cancel '!Super+Control+Escape'"`
 - overseer tag
     - [ ] rules
+- rofi
+    - [x] nvim
 
 ```lua
 {

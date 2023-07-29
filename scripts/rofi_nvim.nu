@@ -31,6 +31,8 @@ def-env open [prog arg] {
                 $addr = $arg
             }
             $cmd = [--server $addr -- $"+\"set title titlestring=($addr)\""]
+        } else if $arg == ':' {
+            $cmd = [$"+\"set title titlestring=world\""]
         } else {
             $cmd = [$"+\"set title titlestring=($arg)\"" -- $arg]
         }
