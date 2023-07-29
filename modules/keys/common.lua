@@ -80,30 +80,26 @@ return function(conf, meta, wallpaper)
         awful.key({ meta, }, "b", function() awful.spawn(browser) end,
             { description = "open a browser", group = "launcher" }),
         awful.key({ meta, }, "Return", function()
-                local history_file = os.getenv("HOME") .. "/.cache/rofi/nvim-server"
+                local history_file = os.getenv("HOME") .. "/.cache/awesome.sqlite"
+                -- echo "create table if not exists rofi_nvim_history (cmd text primary key, count int default 1, recent datetime default (datetime('now', 'localtime')));" | sqlite3 ~/.cache/awesome.sqlite
                 awful.spawn.easy_async_with_shell(
-                    "cat " .. history_file .. " | sort | uniq -c | sort -nr | head -9 | awk '{print $2}'",
+                    "echo 'select cmd from rofi_nvim_history order by count desc limit 9;' " ..
+                    "| sqlite3 " .. history_file,
                     function(history)
                         awful.spawn.easy_async_with_shell(
                             "echo \"new\n" .. history .. "\" | rofi -dmenu -p 'neovim open'",
                             function(out)
-                                if out == "new\n" then
+                                local it = out:gsub("\n", '')
+                                if it == "new" then
                                     open_with_vim(ide)('')
-                                elseif out == "" then
-                                    awful.spawn.with_shell(
-                                        "t=$(mktemp); " ..
-                                        "cat " ..
-                                        history_file ..
-                                        " | sort | uniq -c | sort -nr | head -9 | awk '{print $2}' > $t; " ..
-                                        "mv -f $t " .. history_file
-                                    )
+                                elseif it == "" then
                                 else
-                                    local h = io.open(history_file, 'a')
-                                    if h ~= nil then
-                                        h:write(out)
-                                        h:close()
-                                    end
-                                    open_with_vim(ide)(out:gsub("\n", ''))
+                                    awful.spawn.with_shell(
+                                        "echo \"insert into rofi_nvim_history(cmd) values ('" .. it .. "') " ..
+                                        "on conflict(cmd) do update set count = count + 1, recent = datetime('now', 'localtime');\" " ..
+                                        "| sqlite3 " .. history_file
+                                    )
+                                    open_with_vim(ide)(it)
                                 end
                             end
                         )

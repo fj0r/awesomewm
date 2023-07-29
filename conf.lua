@@ -34,7 +34,7 @@ local M = {
     autorun_once = {
         -- "gnome-session --systemd-service",
         -- "/usr/lib/polkit-1/polkitd",
-        "mkdir -p ~/.cache/rofi/",
+        "echo \"create table if not exists rofi_nvim_history (cmd text primary key, count int default 1, recent datetime default (datetime('now', 'localtime')));\" | sqlite3 ~/.cache/awesome.sqlite",
         "ibus-daemon --xim --replace --daemonize",
     },
     sidebar = {
