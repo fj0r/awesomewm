@@ -91,7 +91,7 @@ return function(conf)
         border_width = 2,
         bg = beautiful.tooltip_bg,
         timer_function = function()
-            return '<b>' .. tostring(os.date('%Y-%m-%d %H:%M:%S %z')) .. '</b>'
+            return '<b>' .. tostring(os.date('%Y-%m-%d %w %H:%M:%S %z')) .. '</b>'
         end
     }
 
