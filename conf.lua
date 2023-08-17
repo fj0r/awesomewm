@@ -27,7 +27,7 @@ local env_path = "export NVIM_LEVEL=x SHELL=/usr/local/bin/nu TERM=screen-256col
 
 local M = {
     autorun = {
-        "setxkbmap -option 'ctrl:swapcaps'",
+        --"setxkbmap -option 'ctrl:swapcaps'",
         --"xcape -e 'Super_L=Super_L|Control_L|Escape'",
         --"source ~/.config/xrandr.rc",
     },
