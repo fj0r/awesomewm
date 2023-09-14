@@ -119,6 +119,11 @@ return function(conf, meta, wallpaper)
                 }
             end,
             { description = "lua execute prompt", group = "awesome" }),
+        awful.key({ meta, shift }, "c",
+            function()
+                awful.spawn("xkill")
+            end,
+            { description = "xkil", group = "awesome" }),
         awful.key({ meta, shift }, "x",
             function()
                 awful.spawn.easy_async_with_shell(
@@ -133,7 +138,6 @@ return function(conf, meta, wallpaper)
                             text = out
                         }
                     end)
-                awful.spawn("xprop")
             end,
             { description = "xprop", group = "awesome" }),
 
