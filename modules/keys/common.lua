@@ -140,6 +140,12 @@ return function(conf, meta, wallpaper)
                     end)
             end,
             { description = "xprop", group = "awesome" }),
+        awful.key({ meta, shift }, "e",
+            function()
+                awful.spawn.with_shell("env XDG_CURRENT_DESKTOP=GNOME gnome-control-center",
+                    false)
+            end,
+            { description = "gnome settings", group = "awesome" }),
 
 
         awful.key({ meta, }, "j",
