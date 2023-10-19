@@ -22,6 +22,7 @@ if not ($history_file | path exists) {
 
 def-env open [prog arg] {
     $env.NVIM_LEVEL = 'x'
+    source ~/.nu
     if $prog == 'neovide' {
         mut cmd = []
         if $arg =~ ':[0-9]+$' {
