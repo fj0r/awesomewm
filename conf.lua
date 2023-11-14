@@ -27,12 +27,13 @@ local env_path = "export NVIM_LEVEL=x SHELL=/usr/local/bin/nu TERM=screen-256col
 
 local M = {
     autorun = {
-        --"setxkbmap -option 'ctrl:swapcaps'",
+        "setxkbmap -option 'ctrl:swapcaps'",
+        "localectl set-x11-keymap '' '' '' ctrl:swapcaps",
         --"xcape -e 'Super_L=Super_L|Control_L|Escape'",
         --"source ~/.config/xrandr.rc",
     },
     autorun_once = {
-        "gnome-session --systemd-service",
+        -- "gnome-session --systemd-service",
         -- "/usr/lib/polkit-1/polkitd",
         "echo \"create table if not exists rofi_nvim_history (cmd text primary key, count int default 1, recent datetime default (datetime('now', 'localtime')));\" | sqlite3 ~/.cache/awesome.sqlite",
         "ibus-daemon --xim --replace --daemonize",
