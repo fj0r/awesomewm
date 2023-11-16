@@ -103,9 +103,9 @@ local M = {
     },
     theme = {
         gap = 0,
-        font = "JetBrains Mono 9",
+        font = "Monaspace Krypton 8",
         notification = {
-            font = "JetBrains Mono 12",
+            font = "Monaspace Krypton 12",
             position = "bottom_right",
         },
         color = {
