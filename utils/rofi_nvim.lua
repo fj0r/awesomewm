@@ -28,7 +28,7 @@ local env_path = "export NVIM_LEVEL=x SHELL=/usr/local/bin/nu TERM=screen-256col
               .. "export PATH=/opt/node/bin:/opt/go/bin:/opt/language-server/rust/bin:/opt/language-server/lua/bin:/opt/node/bin:$HOME/.local/bin:$PATH; "
               .. "export LS_ROOT=/opt/language-server; "
 
-local ide = "bash -c '" .. env_path .. "/usr/local/bin/neovide --multigrid --maximized {}'"
+local ide = "bash -c '" .. env_path .. "/usr/local/bin/neovide --maximized {}'"
 
 -- awful.key({ meta }, "Return", rofi_neovide, { description = "enter development envrionment", group = "launcher" }),
 local rofi_neovide = function()

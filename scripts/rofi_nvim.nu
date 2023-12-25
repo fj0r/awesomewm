@@ -38,7 +38,7 @@ def --env open [prog arg] {
         } else {
             $cmd = [$"+\"set title titlestring=($arg)\"" -- $arg]
         }
-        neovide --multigrid --maximized $cmd
+        neovide --vsync --maximized $cmd
     }
 }
 
