@@ -1,8 +1,7 @@
 #!/usr/bin/env nu
 
 # rofi -show nvim -modi "nvim:rofi_nvim.nu"
-
-$env.LS_ROOT = '/opt/language-server'
+source ~/.nu
 source ~/Configuration/nushell/scripts/__env.nu
 
 # https://github.com/davatorium/rofi/blob/next/doc/rofi-script.5.markdown
